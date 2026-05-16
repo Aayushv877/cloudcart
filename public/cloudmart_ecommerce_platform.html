@@ -1,0 +1,1218 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
+
+  :root {
+    --c-bg: #f9f8f6;
+    --c-surface: #ffffff;
+    --c-surface2: #f3f2ef;
+    --c-border: #e8e6e1;
+    --c-text: #1a1916;
+    --c-muted: #6b6963;
+    --c-accent: #1a1916;
+    --c-accent2: #e8533a;
+    --c-gold: #c9a227;
+    --c-success: #2d7a4f;
+    --c-info: #1a5fa8;
+    --nav-h: 58px;
+    --sidebar-w: 220px;
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --r: 10px;
+    --r-lg: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-text); font-size: 14px; }
+
+  /* ── NAV ─────────────────────────────────────────── */
+  #nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: var(--nav-h); background: rgba(249,248,246,0.92);
+    backdrop-filter: blur(12px); border-bottom: 1px solid var(--c-border);
+    display: flex; align-items: center; padding: 0 24px; gap: 8px;
+  }
+  #nav .logo { font-family: var(--font-display); font-weight: 800; font-size: 18px; letter-spacing: -0.5px; margin-right: 8px; cursor: pointer; }
+  #nav .logo span { color: var(--c-accent2); }
+  .nav-links { display: flex; gap: 2px; flex: 1; }
+  .nav-link { padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13.5px; color: var(--c-muted); transition: all .15s; font-weight: 500; border: none; background: none; }
+  .nav-link:hover { background: var(--c-surface2); color: var(--c-text); }
+  .nav-link.active { background: var(--c-text); color: #fff; }
+  .nav-actions { display: flex; align-items: center; gap: 8px; }
+  .nav-btn { padding: 7px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; font-family: var(--font-body); border: 1px solid var(--c-border); background: var(--c-surface); transition: all .15s; }
+  .nav-btn:hover { background: var(--c-surface2); }
+  .nav-btn.primary { background: var(--c-text); color: #fff; border-color: var(--c-text); }
+  .nav-btn.primary:hover { background: #333; }
+  .cart-badge { position: relative; }
+  .cart-badge .badge { position: absolute; top: -4px; right: -4px; background: var(--c-accent2); color: #fff; font-size: 10px; border-radius: 99px; padding: 1px 5px; font-weight: 700; }
+
+  /* ── MAIN LAYOUT ─────────────────────────────────── */
+  #main { margin-top: var(--nav-h); min-height: calc(100vh - var(--nav-h)); }
+  .page { display: none; animation: fadeIn .25s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── HERO ─────────────────────────────────────────── */
+  #home-hero {
+    background: var(--c-text); color: #fff; padding: 80px 48px 72px;
+    position: relative; overflow: hidden;
+  }
+  #home-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 70% 50%, #2d2923 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow { font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--c-gold); font-weight: 600; margin-bottom: 20px; }
+  .hero-title { font-family: var(--font-display); font-size: 56px; font-weight: 800; line-height: 1.05; letter-spacing: -2px; max-width: 600px; margin-bottom: 20px; }
+  .hero-title em { font-style: normal; color: var(--c-accent2); }
+  .hero-sub { color: #a09e98; font-size: 16px; max-width: 460px; line-height: 1.7; margin-bottom: 36px; }
+  .hero-ctas { display: flex; gap: 12px; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 11px 22px; border-radius: var(--r); cursor: pointer; font-size: 14px; font-weight: 600; font-family: var(--font-body); border: none; transition: all .15s; }
+  .btn-white { background: #fff; color: var(--c-text); }
+  .btn-white:hover { background: #eee; }
+  .btn-outline { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,0.25); }
+  .btn-outline:hover { background: rgba(255,255,255,0.08); }
+  .hero-tags { display: flex; gap: 8px; margin-top: 40px; flex-wrap: wrap; }
+  .hero-tag { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; padding: 5px 12px; font-size: 12px; color: #b0ae9f; }
+  .hero-stats { display: flex; gap: 36px; margin-top: 36px; }
+  .hero-stat-val { font-family: var(--font-display); font-size: 28px; font-weight: 800; color: #fff; }
+  .hero-stat-lbl { font-size: 12px; color: #7a7870; margin-top: 2px; }
+
+  /* ── SECTION ─────────────────────────────────────── */
+  .section { padding: 48px; }
+  .section-title { font-family: var(--font-display); font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .section-sub { color: var(--c-muted); font-size: 14px; margin-bottom: 28px; }
+  .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; }
+  .link-btn { font-size: 13px; color: var(--c-accent2); font-weight: 600; cursor: pointer; border: none; background: none; }
+  .link-btn:hover { text-decoration: underline; }
+
+  /* ── PRODUCT GRID ─────────────────────────────────── */
+  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+  .product-card {
+    background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-lg);
+    overflow: hidden; cursor: pointer; transition: all .2s;
+  }
+  .product-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); border-color: #d0cec8; }
+  .product-img {
+    aspect-ratio: 1; background: var(--c-surface2); display: flex; align-items: center; justify-content: center;
+    font-size: 52px; position: relative; overflow: hidden;
+  }
+  .product-badge { position: absolute; top: 10px; left: 10px; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
+  .badge-new { background: var(--c-text); color: #fff; }
+  .badge-sale { background: var(--c-accent2); color: #fff; }
+  .badge-hot { background: var(--c-gold); color: #fff; }
+  .product-info { padding: 14px 16px; }
+  .product-brand { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--c-muted); margin-bottom: 4px; }
+  .product-name { font-weight: 600; font-size: 14px; margin-bottom: 8px; line-height: 1.35; }
+  .product-price-row { display: flex; align-items: center; gap: 8px; }
+  .product-price { font-family: var(--font-display); font-size: 16px; font-weight: 700; }
+  .product-price-old { font-size: 12px; color: var(--c-muted); text-decoration: line-through; }
+  .product-stars { margin-top: 6px; font-size: 11px; color: var(--c-gold); }
+  .product-actions { display: flex; gap: 6px; margin-top: 10px; }
+  .pa-btn { flex: 1; padding: 7px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; font-family: var(--font-body); transition: all .15s; }
+  .pa-primary { background: var(--c-text); color: #fff; }
+  .pa-primary:hover { background: #333; }
+  .pa-secondary { background: var(--c-surface2); color: var(--c-text); border: 1px solid var(--c-border); }
+  .pa-secondary:hover { background: #e8e6e1; }
+
+  /* ── FILTERS ─────────────────────────────────────── */
+  .filters-bar { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+  .filter-pill { padding: 6px 14px; border-radius: 99px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid var(--c-border); background: var(--c-surface); transition: all .15s; }
+  .filter-pill.active { background: var(--c-text); color: #fff; border-color: var(--c-text); }
+  .filter-pill:hover:not(.active) { border-color: #b0ae9f; background: var(--c-surface2); }
+  .search-bar { display: flex; align-items: center; gap: 10px; padding: 10px 16px; background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r); margin-bottom: 20px; }
+  .search-bar input { flex: 1; border: none; outline: none; font-family: var(--font-body); font-size: 14px; background: transparent; color: var(--c-text); }
+  .search-bar input::placeholder { color: var(--c-muted); }
+
+  /* ── CATEGORY CARDS ──────────────────────────────── */
+  .cats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+  .cat-card { background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-lg); padding: 24px 20px; text-align: center; cursor: pointer; transition: all .2s; }
+  .cat-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.07); }
+  .cat-icon { font-size: 36px; margin-bottom: 10px; }
+  .cat-name { font-weight: 600; font-size: 14px; }
+  .cat-count { font-size: 12px; color: var(--c-muted); margin-top: 4px; }
+
+  /* ── PRODUCT DETAIL ──────────────────────────────── */
+  .pdp-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; padding: 48px; }
+  .pdp-gallery { position: relative; }
+  .pdp-main-img { background: var(--c-surface2); border-radius: var(--r-lg); aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 100px; margin-bottom: 12px; border: 1px solid var(--c-border); }
+  .pdp-thumbs { display: flex; gap: 8px; }
+  .pdp-thumb { background: var(--c-surface2); border-radius: 8px; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; border: 2px solid transparent; transition: border-color .15s; }
+  .pdp-thumb.active { border-color: var(--c-text); }
+  .pdp-info { display: flex; flex-direction: column; gap: 16px; }
+  .pdp-brand { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--c-muted); font-weight: 600; }
+  .pdp-title { font-family: var(--font-display); font-size: 28px; font-weight: 700; line-height: 1.2; letter-spacing: -0.5px; }
+  .pdp-price { font-family: var(--font-display); font-size: 30px; font-weight: 800; }
+  .pdp-price span { font-size: 16px; color: var(--c-muted); text-decoration: line-through; margin-left: 10px; font-weight: 400; font-family: var(--font-body); }
+  .pdp-desc { color: var(--c-muted); line-height: 1.7; font-size: 14px; }
+  .variant-label { font-size: 12px; font-weight: 600; color: var(--c-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .variants { display: flex; gap: 8px; flex-wrap: wrap; }
+  .variant-btn { padding: 6px 14px; border-radius: 8px; border: 1.5px solid var(--c-border); font-size: 13px; cursor: pointer; background: var(--c-surface); transition: all .15s; font-family: var(--font-body); }
+  .variant-btn.active { border-color: var(--c-text); background: var(--c-text); color: #fff; }
+  .qty-control { display: flex; align-items: center; gap: 0; }
+  .qty-btn { width: 36px; height: 36px; border: 1px solid var(--c-border); background: var(--c-surface); cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+  .qty-btn:first-child { border-radius: 8px 0 0 8px; }
+  .qty-btn:last-child { border-radius: 0 8px 8px 0; }
+  .qty-btn:hover { background: var(--c-surface2); }
+  .qty-val { width: 48px; height: 36px; border: 1px solid var(--c-border); border-left: none; border-right: none; display: flex; align-items: center; justify-content: center; font-weight: 600; }
+  .pdp-ctas { display: flex; gap: 10px; }
+  .pdp-ctas .btn { flex: 1; justify-content: center; }
+  .btn-dark { background: var(--c-text); color: #fff; }
+  .btn-dark:hover { background: #333; }
+  .btn-border { background: transparent; border: 1.5px solid var(--c-text); color: var(--c-text); }
+  .btn-border:hover { background: var(--c-surface2); }
+  .pdp-features { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .pdp-feature { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--c-muted); }
+  .pdp-feature::before { content: '✓'; font-weight: 700; color: var(--c-success); }
+
+  /* ── CART ─────────────────────────────────────────── */
+  .cart-layout { display: grid; grid-template-columns: 1fr 340px; gap: 24px; padding: 32px 48px; }
+  .cart-item { display: grid; grid-template-columns: 72px 1fr auto; gap: 16px; padding: 16px; background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r); margin-bottom: 12px; align-items: center; }
+  .cart-item-img { background: var(--c-surface2); border-radius: 8px; width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+  .cart-item-name { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+  .cart-item-variant { font-size: 12px; color: var(--c-muted); }
+  .cart-item-price { font-family: var(--font-display); font-size: 16px; font-weight: 700; }
+  .order-summary { background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-lg); padding: 24px; position: sticky; top: calc(var(--nav-h) + 20px); }
+  .order-summary h3 { font-family: var(--font-display); font-size: 16px; font-weight: 700; margin-bottom: 20px; }
+  .summary-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 12px; }
+  .summary-row.total { font-weight: 700; font-size: 16px; border-top: 1px solid var(--c-border); padding-top: 14px; margin-top: 4px; }
+  .promo-input { display: flex; gap: 8px; margin-bottom: 16px; }
+  .promo-input input { flex: 1; padding: 9px 12px; border: 1px solid var(--c-border); border-radius: 8px; font-family: var(--font-body); font-size: 13px; background: var(--c-surface2); outline: none; }
+  .promo-input input:focus { border-color: var(--c-text); }
+  .promo-input button { padding: 9px 14px; background: var(--c-surface2); border: 1px solid var(--c-border); border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; font-family: var(--font-body); }
+
+  /* ── AUTH ─────────────────────────────────────────── */
+  .auth-page { min-height: calc(100vh - var(--nav-h)); display: flex; align-items: center; justify-content: center; padding: 40px 20px; background: var(--c-bg); }
+  .auth-card { background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-lg); padding: 40px; width: 100%; max-width: 420px; }
+  .auth-logo { font-family: var(--font-display); font-size: 22px; font-weight: 800; margin-bottom: 6px; text-align: center; }
+  .auth-logo span { color: var(--c-accent2); }
+  .auth-tagline { text-align: center; color: var(--c-muted); font-size: 14px; margin-bottom: 32px; }
+  .auth-title { font-family: var(--font-display); font-size: 22px; font-weight: 700; margin-bottom: 24px; }
+  .form-group { margin-bottom: 16px; }
+  .form-label { display: block; font-size: 12px; font-weight: 600; color: var(--c-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .form-input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--c-border); border-radius: var(--r); font-family: var(--font-body); font-size: 14px; background: var(--c-surface2); color: var(--c-text); outline: none; transition: border-color .15s; }
+  .form-input:focus { border-color: var(--c-text); background: var(--c-surface); }
+  .form-input::placeholder { color: #b0ae9f; }
+  .auth-divider { display: flex; align-items: center; gap: 12px; margin: 16px 0; color: var(--c-muted); font-size: 12px; }
+  .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--c-border); }
+  .social-btn { width: 100%; padding: 10px; border: 1.5px solid var(--c-border); border-radius: var(--r); background: var(--c-surface); cursor: pointer; font-family: var(--font-body); font-size: 14px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 8px; transition: all .15s; }
+  .social-btn:hover { background: var(--c-surface2); }
+  .form-link { font-size: 13px; color: var(--c-muted); text-align: center; margin-top: 16px; }
+  .form-link a { color: var(--c-accent2); font-weight: 600; cursor: pointer; text-decoration: none; }
+  .form-link a:hover { text-decoration: underline; }
+  .form-check { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--c-muted); margin-bottom: 16px; }
+  .form-check input { accent-color: var(--c-text); }
+  .forgot-link { display: block; text-align: right; font-size: 12px; color: var(--c-accent2); font-weight: 600; cursor: pointer; margin-top: -8px; margin-bottom: 16px; }
+
+  /* ── ADMIN ────────────────────────────────────────── */
+  .admin-layout { display: flex; min-height: calc(100vh - var(--nav-h)); }
+  .admin-sidebar { width: var(--sidebar-w); background: var(--c-text); padding: 24px 16px; position: sticky; top: var(--nav-h); height: calc(100vh - var(--nav-h)); overflow-y: auto; }
+  .sidebar-section { margin-bottom: 24px; }
+  .sidebar-label { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #7a7870; font-weight: 600; padding: 0 8px; margin-bottom: 8px; }
+  .sidebar-link { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; cursor: pointer; font-size: 13.5px; color: #b0ae9f; transition: all .15s; margin-bottom: 2px; }
+  .sidebar-link:hover { background: rgba(255,255,255,0.07); color: #e0dcd5; }
+  .sidebar-link.active { background: rgba(255,255,255,0.12); color: #fff; }
+  .sidebar-link .icon { font-size: 15px; opacity: 0.7; }
+  .sidebar-link.active .icon { opacity: 1; }
+  .admin-content { flex: 1; padding: 32px; overflow-y: auto; }
+  .admin-title { font-family: var(--font-display); font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+  .admin-subtitle { color: var(--c-muted); font-size: 14px; margin-bottom: 32px; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+  .stat-card { background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-lg); padding: 20px; }
+  .stat-label { font-size: 12px; color: var(--c-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+  .stat-value { font-family: var(--font-display); font-size: 26px; font-weight: 800; }
+  .stat-change { font-size: 12px; margin-top: 6px; font-weight: 600; }
+  .change-up { color: var(--c-success); }
+  .change-down { color: var(--c-accent2); }
+  .admin-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+  .admin-card { background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-lg); padding: 20px; }
+  .admin-card-title { font-family: var(--font-display); font-size: 15px; font-weight: 700; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+  .chart-bars { display: flex; align-items: flex-end; gap: 6px; height: 100px; }
+  .chart-bar { flex: 1; border-radius: 4px 4px 0 0; background: var(--c-surface2); transition: background .2s; cursor: pointer; min-height: 4px; }
+  .chart-bar:hover { background: var(--c-text); }
+  .chart-labels { display: flex; gap: 6px; margin-top: 6px; }
+  .chart-lbl { flex: 1; text-align: center; font-size: 10px; color: var(--c-muted); }
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--c-muted); font-weight: 600; padding: 8px 12px; border-bottom: 2px solid var(--c-border); }
+  .data-table td { padding: 12px; border-bottom: 1px solid var(--c-border); font-size: 13px; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--c-surface2); }
+  .status-pill { display: inline-block; padding: 3px 9px; border-radius: 99px; font-size: 11px; font-weight: 600; }
+  .s-delivered { background: #d7f0e5; color: #1a6040; }
+  .s-processing { background: #fef3cd; color: #8a6000; }
+  .s-shipped { background: #dbeafe; color: #1e40af; }
+  .s-cancelled { background: #fde8e8; color: #9b1c1c; }
+  .action-btns { display: flex; gap: 4px; }
+  .action-btn { padding: 4px 10px; border-radius: 6px; border: 1px solid var(--c-border); background: var(--c-surface); cursor: pointer; font-size: 11px; font-weight: 600; transition: all .15s; }
+  .action-btn:hover { background: var(--c-surface2); }
+  .action-btn.danger { color: var(--c-accent2); border-color: #fcd0c7; }
+  .action-btn.danger:hover { background: #fef0ed; }
+
+  /* ── PROFILE ─────────────────────────────────────── */
+  .profile-layout { display: grid; grid-template-columns: 260px 1fr; gap: 24px; padding: 32px 48px; }
+  .profile-sidebar { position: sticky; top: calc(var(--nav-h) + 20px); }
+  .profile-card { background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-lg); padding: 24px; text-align: center; margin-bottom: 16px; }
+  .profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--c-text); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 28px; font-weight: 800; color: #fff; margin: 0 auto 12px; }
+  .profile-name { font-family: var(--font-display); font-size: 18px; font-weight: 700; }
+  .profile-email { font-size: 12px; color: var(--c-muted); margin-top: 4px; }
+  .profile-badge { display: inline-block; margin-top: 8px; background: var(--c-gold); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 99px; }
+  .profile-nav { background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-lg); overflow: hidden; }
+  .profile-nav-item { padding: 12px 16px; font-size: 13.5px; cursor: pointer; border-bottom: 1px solid var(--c-border); transition: all .15s; display: flex; align-items: center; gap: 10px; }
+  .profile-nav-item:last-child { border-bottom: none; }
+  .profile-nav-item:hover { background: var(--c-surface2); }
+  .profile-nav-item.active { background: var(--c-surface2); font-weight: 600; }
+
+  /* ── CHECKOUT ─────────────────────────────────────── */
+  .checkout-layout { display: grid; grid-template-columns: 1fr 360px; gap: 24px; padding: 32px 48px; }
+  .checkout-steps { display: flex; gap: 0; margin-bottom: 28px; border-radius: var(--r); overflow: hidden; border: 1px solid var(--c-border); }
+  .checkout-step { flex: 1; padding: 12px 16px; text-align: center; font-size: 13px; font-weight: 600; background: var(--c-surface); color: var(--c-muted); }
+  .checkout-step.active { background: var(--c-text); color: #fff; }
+  .checkout-step.done { background: var(--c-surface2); color: var(--c-success); }
+
+  /* ── WISHLIST ─────────────────────────────────────── */
+  .wishlist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; padding: 32px 48px; }
+
+  /* ── FOOTER ───────────────────────────────────────── */
+  #footer { background: var(--c-text); color: #b0ae9f; padding: 48px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+  .footer-logo { font-family: var(--font-display); font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+  .footer-logo span { color: var(--c-accent2); }
+  .footer-desc { font-size: 13px; line-height: 1.7; color: #7a7870; }
+  .footer-head { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #e0dcd5; margin-bottom: 16px; }
+  .footer-link { display: block; font-size: 13px; color: #7a7870; margin-bottom: 8px; cursor: pointer; transition: color .15s; }
+  .footer-link:hover { color: #e0dcd5; }
+  .footer-bottom { border-top: 1px solid #2d2923; padding-top: 24px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-copy { font-size: 12px; color: #4a4844; }
+  .footer-badges { display: flex; gap: 8px; }
+  .footer-badge { background: #2d2923; border: 1px solid #3d3b35; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #7a7870; }
+
+  /* ── TOAST ─────────────────────────────────────────── */
+  #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+  .toast { background: var(--c-text); color: #fff; padding: 12px 18px; border-radius: var(--r); font-size: 13.5px; font-weight: 500; display: flex; align-items: center; gap: 10px; animation: slideUp .3s ease; pointer-events: all; box-shadow: 0 4px 16px rgba(0,0,0,0.2); max-width: 320px; }
+  .toast.success { background: #1a5a35; }
+  .toast.warning { background: #8a5800; }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── UTILS ─────────────────────────────────────────── */
+  .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--c-muted); padding: 16px 48px 0; }
+  .breadcrumb span { cursor: pointer; }
+  .breadcrumb span:hover { color: var(--c-text); text-decoration: underline; }
+  .bc-sep { color: var(--c-border); }
+  .empty-state { text-align: center; padding: 64px 24px; }
+  .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
+  .empty-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .empty-sub { color: var(--c-muted); font-size: 14px; margin-bottom: 20px; }
+  .sort-select { padding: 7px 12px; border: 1px solid var(--c-border); border-radius: 8px; font-family: var(--font-body); font-size: 13px; background: var(--c-surface); cursor: pointer; outline: none; }
+  .pagination { display: flex; gap: 4px; justify-content: center; margin-top: 32px; margin-bottom: 8px; }
+  .page-btn { width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--c-border); background: var(--c-surface); cursor: pointer; font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+  .page-btn.active { background: var(--c-text); color: #fff; border-color: var(--c-text); }
+  .page-btn:hover:not(.active) { background: var(--c-surface2); }
+  .banner { background: var(--c-accent2); color: #fff; text-align: center; padding: 10px; font-size: 13px; font-weight: 600; }
+  .banner a { color: rgba(255,255,255,0.85); text-decoration: underline; cursor: pointer; }
+
+  /* Mobile adjustments */
+  @media (max-width: 640px) {
+    .pdp-layout { grid-template-columns: 1fr; }
+    .cart-layout { grid-template-columns: 1fr; }
+    .checkout-layout { grid-template-columns: 1fr; }
+    .profile-layout { grid-template-columns: 1fr; }
+    .admin-sidebar { display: none; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr; }
+    .hero-title { font-size: 38px; }
+    .admin-grid-2 { grid-template-columns: 1fr; }
+  }
+</style>
+
+<!-- BANNER -->
+<div class="banner">🎉 Free shipping on orders over $75 — <a onclick="navigate('products')">Shop now →</a></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="logo" onclick="navigate('home')">Cloud<span>Mart</span></div>
+  <div class="nav-links">
+    <button class="nav-link active" id="nl-home" onclick="navigate('home')">Home</button>
+    <button class="nav-link" id="nl-products" onclick="navigate('products')">Products</button>
+    <button class="nav-link" id="nl-categories" onclick="navigate('categories')">Categories</button>
+    <button class="nav-link" id="nl-admin" onclick="navigate('admin')">Dashboard</button>
+  </div>
+  <div class="nav-actions">
+    <button class="nav-btn" onclick="navigate('wishlist')">♡ Wishlist</button>
+    <button class="nav-btn cart-badge" onclick="navigate('cart')">🛒 Cart <span class="badge" id="cart-count">3</span></button>
+    <button class="nav-btn" onclick="navigate('profile')">👤 Account</button>
+    <button class="nav-btn primary" onclick="navigate('login')">Sign in</button>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+
+<!-- HOME PAGE -->
+<div class="page active" id="pg-home">
+  <div id="home-hero">
+    <div class="hero-eyebrow">Multi-vendor marketplace</div>
+    <h1 class="hero-title">Shop smarter,<br>Live <em>better</em></h1>
+    <p class="hero-sub">Discover thousands of products from verified vendors. Premium quality, guaranteed.</p>
+    <div class="hero-ctas">
+      <button class="btn btn-white" onclick="navigate('products')">Browse Products →</button>
+      <button class="btn btn-outline" onclick="navigate('categories')">Explore Categories</button>
+    </div>
+    <div class="hero-tags">
+      <span class="hero-tag">⚡ Free shipping $75+</span>
+      <span class="hero-tag">🔒 Secure payments</span>
+      <span class="hero-tag">↩️ 30-day returns</span>
+      <span class="hero-tag">⭐ Verified vendors</span>
+    </div>
+    <div class="hero-stats">
+      <div><div class="hero-stat-val">48K+</div><div class="hero-stat-lbl">Products</div></div>
+      <div><div class="hero-stat-val">1,200+</div><div class="hero-stat-lbl">Vendors</div></div>
+      <div><div class="hero-stat-val">850K</div><div class="hero-stat-lbl">Customers</div></div>
+      <div><div class="hero-stat-val">4.9★</div><div class="hero-stat-lbl">Avg rating</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div><div class="section-title">Featured Products</div><div class="section-sub">Handpicked by our team</div></div>
+      <button class="link-btn" onclick="navigate('products')">View all →</button>
+    </div>
+    <div class="products-grid" id="home-products"></div>
+  </div>
+
+  <div class="section" style="background:var(--c-surface);border-top:1px solid var(--c-border);border-bottom:1px solid var(--c-border)">
+    <div class="section-header">
+      <div><div class="section-title">Shop by Category</div><div class="section-sub">Find exactly what you need</div></div>
+    </div>
+    <div class="cats-grid" id="home-cats"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div><div class="section-title">Trending Now</div><div class="section-sub">What everyone's buying this week</div></div>
+      <button class="link-btn" onclick="navigate('products')">See more →</button>
+    </div>
+    <div class="products-grid" id="trending-products"></div>
+  </div>
+</div>
+
+<!-- PRODUCTS PAGE -->
+<div class="page" id="pg-products">
+  <div class="breadcrumb"><span onclick="navigate('home')">Home</span><span class="bc-sep">/</span><span>Products</span></div>
+  <div class="section">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <div>
+        <div class="section-title">All Products</div>
+        <div class="section-sub" id="products-count">Showing 48 products</div>
+      </div>
+      <select class="sort-select" onchange="sortProducts(this.value)">
+        <option>Sort: Featured</option>
+        <option>Price: Low to High</option>
+        <option>Price: High to Low</option>
+        <option>Newest First</option>
+        <option>Best Rating</option>
+      </select>
+    </div>
+    <div class="search-bar">
+      <span style="color:var(--c-muted)">🔍</span>
+      <input type="text" placeholder="Search products, brands, categories..." oninput="filterSearch(this.value)">
+    </div>
+    <div class="filters-bar">
+      <span style="font-size:12px;color:var(--c-muted);font-weight:600">Filter:</span>
+      <div class="filter-pill active" onclick="toggleFilter(this,'All')">All</div>
+      <div class="filter-pill" onclick="toggleFilter(this,'Electronics')">Electronics</div>
+      <div class="filter-pill" onclick="toggleFilter(this,'Fashion')">Fashion</div>
+      <div class="filter-pill" onclick="toggleFilter(this,'Home')">Home & Garden</div>
+      <div class="filter-pill" onclick="toggleFilter(this,'Sports')">Sports</div>
+      <div class="filter-pill" onclick="toggleFilter(this,'Books')">Books</div>
+      <div class="filter-pill" onclick="toggleFilter(this,'Beauty')">Beauty</div>
+      <div class="filter-pill" onclick="toggleFilter(this,'Under $50')">Under $50</div>
+      <div class="filter-pill" onclick="toggleFilter(this,'On Sale')">On Sale 🔥</div>
+    </div>
+    <div class="products-grid" id="all-products"></div>
+    <div class="pagination">
+      <button class="page-btn">‹</button>
+      <button class="page-btn active">1</button>
+      <button class="page-btn">2</button>
+      <button class="page-btn">3</button>
+      <button class="page-btn">4</button>
+      <button class="page-btn">…</button>
+      <button class="page-btn">12</button>
+      <button class="page-btn">›</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT DETAIL -->
+<div class="page" id="pg-product-detail">
+  <div class="breadcrumb"><span onclick="navigate('home')">Home</span><span class="bc-sep">/</span><span onclick="navigate('products')">Products</span><span class="bc-sep">/</span><span id="pdp-breadcrumb">AirPods Pro</span></div>
+  <div class="pdp-layout">
+    <div class="pdp-gallery">
+      <div class="pdp-main-img" id="pdp-main-img">🎧</div>
+      <div class="pdp-thumbs">
+        <div class="pdp-thumb active" onclick="selectThumb(this,'🎧')">🎧</div>
+        <div class="pdp-thumb" onclick="selectThumb(this,'📦')">📦</div>
+        <div class="pdp-thumb" onclick="selectThumb(this,'🔌')">🔌</div>
+        <div class="pdp-thumb" onclick="selectThumb(this,'📋')">📋</div>
+      </div>
+    </div>
+    <div class="pdp-info">
+      <div class="pdp-brand">Apple</div>
+      <h1 class="pdp-title" id="pdp-title">AirPods Pro (2nd Gen)</h1>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="color:var(--c-gold);font-size:14px">★★★★★</span>
+        <span style="font-size:12px;color:var(--c-muted)">4.9 (2,847 reviews)</span>
+        <span style="font-size:11px;color:var(--c-success);font-weight:600">✓ In stock</span>
+      </div>
+      <div class="pdp-price" id="pdp-price">$249.00 <span>$299.00</span></div>
+      <p class="pdp-desc">Active Noise Cancellation up to 2x more powerful. Adaptive Transparency. Personalized Spatial Audio with dynamic head tracking. Up to 30 hours total listening time with case.</p>
+      <div>
+        <div class="variant-label">Color</div>
+        <div class="variants">
+          <button class="variant-btn active" onclick="selectVariant(this)">White</button>
+          <button class="variant-btn" onclick="selectVariant(this)">Space Gray</button>
+        </div>
+      </div>
+      <div>
+        <div class="variant-label">Quantity</div>
+        <div style="display:flex;align-items:center;gap:16px">
+          <div class="qty-control">
+            <button class="qty-btn" onclick="updateQty(-1)">−</button>
+            <div class="qty-val" id="qty">1</div>
+            <button class="qty-btn" onclick="updateQty(1)">+</button>
+          </div>
+          <span style="font-size:12px;color:var(--c-muted)">Only 8 left</span>
+        </div>
+      </div>
+      <div class="pdp-ctas">
+        <button class="btn btn-dark" onclick="addToCart()">🛒 Add to Cart</button>
+        <button class="btn btn-border" onclick="addToWishlist()">♡ Wishlist</button>
+      </div>
+      <div class="pdp-features">
+        <div class="pdp-feature">Free shipping</div>
+        <div class="pdp-feature">30-day returns</div>
+        <div class="pdp-feature">Secure checkout</div>
+        <div class="pdp-feature">Price match guarantee</div>
+      </div>
+    </div>
+  </div>
+  <div class="section" style="border-top:1px solid var(--c-border)">
+    <div class="section-header">
+      <div class="section-title">Related Products</div>
+      <button class="link-btn" onclick="navigate('products')">View all</button>
+    </div>
+    <div class="products-grid" id="related-products"></div>
+  </div>
+</div>
+
+<!-- CATEGORIES PAGE -->
+<div class="page" id="pg-categories">
+  <div class="breadcrumb"><span onclick="navigate('home')">Home</span><span class="bc-sep">/</span><span>Categories</span></div>
+  <div class="section">
+    <div class="section-title">All Categories</div>
+    <div class="section-sub">Explore our full product range</div>
+    <div class="cats-grid" id="all-cats" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr))"></div>
+  </div>
+</div>
+
+<!-- CART PAGE -->
+<div class="page" id="pg-cart">
+  <div class="breadcrumb"><span onclick="navigate('home')">Home</span><span class="bc-sep">/</span><span>Cart</span></div>
+  <div class="cart-layout">
+    <div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:16px">
+        <h2 style="font-family:var(--font-display);font-size:20px;font-weight:700">Your Cart (3)</h2>
+        <button class="link-btn" style="color:var(--c-muted)">Clear all</button>
+      </div>
+      <div id="cart-items"></div>
+    </div>
+    <div>
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+        <div class="promo-input">
+          <input type="text" placeholder="Promo code">
+          <button>Apply</button>
+        </div>
+        <div class="summary-row"><span>Subtotal (3 items)</span><span>$497.00</span></div>
+        <div class="summary-row"><span>Shipping</span><span style="color:var(--c-success)">Free</span></div>
+        <div class="summary-row"><span>Tax (8%)</span><span>$39.76</span></div>
+        <div class="summary-row"><span style="color:var(--c-accent2)">Promo (SAVE10)</span><span style="color:var(--c-accent2)">−$49.70</span></div>
+        <div class="summary-row total"><span>Total</span><span>$487.06</span></div>
+        <button class="btn btn-dark" style="width:100%;justify-content:center;margin-top:4px" onclick="navigate('checkout')">Checkout →</button>
+        <button class="btn btn-border" style="width:100%;justify-content:center;margin-top:8px" onclick="navigate('products')">Continue Shopping</button>
+        <div style="margin-top:16px;text-align:center">
+          <div style="font-size:11px;color:var(--c-muted);margin-bottom:8px">Secure payment</div>
+          <div style="display:flex;justify-content:center;gap:8px;font-size:18px">💳 🔒 ✅</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WISHLIST PAGE -->
+<div class="page" id="pg-wishlist">
+  <div class="breadcrumb"><span onclick="navigate('home')">Home</span><span class="bc-sep">/</span><span>Wishlist</span></div>
+  <div class="section">
+    <div class="section-header">
+      <div><div class="section-title">My Wishlist</div><div class="section-sub" id="wishlist-count">4 items saved</div></div>
+      <button class="link-btn">Share wishlist</button>
+    </div>
+    <div class="products-grid" id="wishlist-products"></div>
+  </div>
+</div>
+
+<!-- CHECKOUT PAGE -->
+<div class="page" id="pg-checkout">
+  <div class="breadcrumb"><span onclick="navigate('home')">Home</span><span class="bc-sep">/</span><span onclick="navigate('cart')">Cart</span><span class="bc-sep">/</span><span>Checkout</span></div>
+  <div class="checkout-layout">
+    <div>
+      <div class="checkout-steps">
+        <div class="checkout-step done">✓ Cart</div>
+        <div class="checkout-step active">2. Shipping</div>
+        <div class="checkout-step">3. Payment</div>
+        <div class="checkout-step">4. Review</div>
+      </div>
+      <div class="admin-card" style="margin-bottom:16px">
+        <div class="admin-card-title">Shipping Information</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="form-group"><label class="form-label">First Name</label><input class="form-input" placeholder="John"></div>
+          <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" placeholder="Doe"></div>
+          <div class="form-group" style="grid-column:1/-1"><label class="form-label">Address Line 1</label><input class="form-input" placeholder="123 Main Street"></div>
+          <div class="form-group" style="grid-column:1/-1"><label class="form-label">Address Line 2</label><input class="form-input" placeholder="Apt, Suite, etc. (optional)"></div>
+          <div class="form-group"><label class="form-label">City</label><input class="form-input" placeholder="New York"></div>
+          <div class="form-group"><label class="form-label">ZIP Code</label><input class="form-input" placeholder="10001"></div>
+          <div class="form-group"><label class="form-label">State</label><input class="form-input" placeholder="NY"></div>
+          <div class="form-group"><label class="form-label">Phone</label><input class="form-input" placeholder="+1 (555) 000-0000"></div>
+        </div>
+        <div style="margin-top:16px">
+          <div class="variant-label" style="margin-bottom:12px">Shipping Method</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <label style="display:flex;align-items:center;gap:12px;padding:12px;border:1.5px solid var(--c-text);border-radius:8px;cursor:pointer;background:var(--c-surface2)">
+              <input type="radio" name="ship" checked style="accent-color:var(--c-text)"><span style="flex:1"><strong>Standard (3-5 days)</strong> — FREE</span><span style="font-weight:700">$0.00</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--c-border);border-radius:8px;cursor:pointer">
+              <input type="radio" name="ship" style="accent-color:var(--c-text)"><span style="flex:1"><strong>Express (1-2 days)</strong></span><span style="font-weight:700">$12.99</span>
+            </label>
+          </div>
+        </div>
+        <button class="btn btn-dark" style="margin-top:20px" onclick="navigate('cart')">← Back to Cart</button>
+        <button class="btn btn-dark" style="margin-top:20px;margin-left:10px" onclick="showToast('Payment step coming!','success')">Continue to Payment →</button>
+      </div>
+    </div>
+    <div class="order-summary">
+      <h3>Order Summary</h3>
+      <div style="margin-bottom:16px">
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px">
+          <div style="background:var(--c-surface2);border-radius:6px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:20px">🎧</div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:600">AirPods Pro 2nd Gen</div><div style="font-size:11px;color:var(--c-muted)">White · Qty 1</div></div>
+          <div style="font-weight:700;font-size:13px">$249</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px">
+          <div style="background:var(--c-surface2);border-radius:6px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:20px">👟</div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:600">Nike Air Max 270</div><div style="font-size:11px;color:var(--c-muted)">Size 10 · Qty 1</div></div>
+          <div style="font-weight:700;font-size:13px">$150</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <div style="background:var(--c-surface2);border-radius:6px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:20px">📚</div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:600">Clean Code Book</div><div style="font-size:11px;color:var(--c-muted)">Paperback · Qty 1</div></div>
+          <div style="font-weight:700;font-size:13px">$39</div>
+        </div>
+      </div>
+      <div class="summary-row"><span>Subtotal</span><span>$438.00</span></div>
+      <div class="summary-row"><span>Shipping</span><span style="color:var(--c-success)">Free</span></div>
+      <div class="summary-row"><span>Tax</span><span>$35.04</span></div>
+      <div class="summary-row total"><span>Total</span><span>$473.04</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN PAGE -->
+<div class="page" id="pg-login">
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-logo">Cloud<span>Mart</span></div>
+      <div class="auth-tagline">Sign in to your account</div>
+      <button class="social-btn">
+        <span>G</span> Continue with Google
+      </button>
+      <button class="social-btn">
+        <span>f</span> Continue with Facebook
+      </button>
+      <div class="auth-divider">or sign in with email</div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="you@example.com"></div>
+      <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="••••••••"></div>
+      <a class="forgot-link" onclick="navigate('forgot')">Forgot password?</a>
+      <div class="form-check"><input type="checkbox" checked><span>Remember me for 30 days</span></div>
+      <button class="btn btn-dark" style="width:100%;justify-content:center" onclick="doLogin()">Sign In →</button>
+      <div class="form-link">Don't have an account? <a onclick="navigate('register')">Create one →</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- REGISTER PAGE -->
+<div class="page" id="pg-register">
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-logo">Cloud<span>Mart</span></div>
+      <div class="auth-tagline">Create your free account</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group"><label class="form-label">First Name</label><input class="form-input" placeholder="John"></div>
+        <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" placeholder="Doe"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="you@example.com"></div>
+      <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="Min 8 characters"></div>
+      <div class="form-group"><label class="form-label">Confirm Password</label><input class="form-input" type="password" placeholder="Repeat password"></div>
+      <div class="form-check"><input type="checkbox"><span>I agree to the <a style="color:var(--c-accent2);cursor:pointer">Terms of Service</a> and <a style="color:var(--c-accent2);cursor:pointer">Privacy Policy</a></span></div>
+      <button class="btn btn-dark" style="width:100%;justify-content:center" onclick="showToast('Account created!','success');navigate('home')">Create Account →</button>
+      <div class="form-link">Already have an account? <a onclick="navigate('login')">Sign in →</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- FORGOT PASSWORD PAGE -->
+<div class="page" id="pg-forgot">
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-logo">Cloud<span>Mart</span></div>
+      <div class="auth-tagline">We'll send you a reset link</div>
+      <div class="form-group" style="margin-bottom:20px"><label class="form-label">Email Address</label><input class="form-input" type="email" placeholder="you@example.com"></div>
+      <button class="btn btn-dark" style="width:100%;justify-content:center" onclick="showToast('Reset email sent!','success')">Send Reset Link →</button>
+      <div class="form-link"><a onclick="navigate('login')">← Back to Sign In</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE PAGE -->
+<div class="page" id="pg-profile">
+  <div class="profile-layout">
+    <div class="profile-sidebar">
+      <div class="profile-card">
+        <div class="profile-avatar">JD</div>
+        <div class="profile-name">John Doe</div>
+        <div class="profile-email">john.doe@email.com</div>
+        <div class="profile-badge">⭐ Premium Member</div>
+      </div>
+      <div class="profile-nav">
+        <div class="profile-nav-item active">👤 Profile Settings</div>
+        <div class="profile-nav-item" onclick="navigate('orders')">📦 Order History</div>
+        <div class="profile-nav-item">📍 Addresses</div>
+        <div class="profile-nav-item" onclick="navigate('wishlist')">♡ Wishlist</div>
+        <div class="profile-nav-item">💳 Payment Methods</div>
+        <div class="profile-nav-item">🔔 Notifications</div>
+        <div class="profile-nav-item" style="color:var(--c-accent2)" onclick="showToast('Logged out','warning');navigate('login')">← Sign Out</div>
+      </div>
+    </div>
+    <div>
+      <div class="admin-card" style="margin-bottom:16px">
+        <div class="admin-card-title">Personal Information</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="form-group"><label class="form-label">First Name</label><input class="form-input" value="John"></div>
+          <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" value="Doe"></div>
+          <div class="form-group" style="grid-column:1/-1"><label class="form-label">Email</label><input class="form-input" type="email" value="john.doe@email.com"></div>
+          <div class="form-group"><label class="form-label">Phone</label><input class="form-input" value="+1 (555) 123-4567"></div>
+          <div class="form-group"><label class="form-label">Date of Birth</label><input class="form-input" type="date" value="1990-01-15"></div>
+        </div>
+        <button class="btn btn-dark" style="margin-top:8px" onclick="showToast('Profile updated!','success')">Save Changes</button>
+      </div>
+      <div class="admin-card">
+        <div class="admin-card-title">Change Password</div>
+        <div class="form-group"><label class="form-label">Current Password</label><input class="form-input" type="password" placeholder="••••••••"></div>
+        <div class="form-group"><label class="form-label">New Password</label><input class="form-input" type="password" placeholder="••••••••"></div>
+        <div class="form-group"><label class="form-label">Confirm New Password</label><input class="form-input" type="password" placeholder="••••••••"></div>
+        <button class="btn btn-dark" style="margin-top:8px" onclick="showToast('Password updated!','success')">Update Password</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER HISTORY -->
+<div class="page" id="pg-orders">
+  <div class="breadcrumb"><span onclick="navigate('home')">Home</span><span class="bc-sep">/</span><span onclick="navigate('profile')">Account</span><span class="bc-sep">/</span><span>Orders</span></div>
+  <div class="section">
+    <div class="section-title">Order History</div>
+    <div class="section-sub">Track and manage your orders</div>
+    <div class="search-bar" style="margin-bottom:16px"><span style="color:var(--c-muted)">🔍</span><input placeholder="Search by order number, product..."></div>
+    <div class="admin-card">
+      <table class="data-table">
+        <thead><tr>
+          <th>Order #</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th><th>Actions</th>
+        </tr></thead>
+        <tbody>
+          <tr><td style="font-weight:600">#CM-10482</td><td>May 10, 2026</td><td>AirPods Pro, Nike Shoes</td><td><strong>$399.00</strong></td><td><span class="status-pill s-delivered">Delivered</span></td><td><div class="action-btns"><button class="action-btn">View</button><button class="action-btn">Reorder</button></div></td></tr>
+          <tr><td style="font-weight:600">#CM-10441</td><td>Apr 28, 2026</td><td>MacBook Pro Sleeve</td><td><strong>$49.00</strong></td><td><span class="status-pill s-delivered">Delivered</span></td><td><div class="action-btns"><button class="action-btn">View</button><button class="action-btn">Review</button></div></td></tr>
+          <tr><td style="font-weight:600">#CM-10391</td><td>Apr 15, 2026</td><td>Gaming Chair, Desk Mat</td><td><strong>$349.00</strong></td><td><span class="status-pill s-shipped">Shipped</span></td><td><div class="action-btns"><button class="action-btn">Track</button><button class="action-btn">View</button></div></td></tr>
+          <tr><td style="font-weight:600">#CM-10312</td><td>Mar 30, 2026</td><td>Protein Powder (2 items)</td><td><strong>$89.00</strong></td><td><span class="status-pill s-processing">Processing</span></td><td><div class="action-btns"><button class="action-btn">View</button><button class="action-btn danger">Cancel</button></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div class="page" id="pg-admin">
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div style="font-family:var(--font-display);font-size:15px;font-weight:800;color:#fff;margin-bottom:28px;padding-left:8px">Cloud<span style="color:var(--c-accent2)">Mart</span> <span style="font-size:11px;color:#7a7870;font-weight:500">Admin</span></div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Main</div>
+        <div class="sidebar-link active" onclick="adminTab('overview',this)"><span class="icon">📊</span> Overview</div>
+        <div class="sidebar-link" onclick="adminTab('analytics',this)"><span class="icon">📈</span> Analytics</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Commerce</div>
+        <div class="sidebar-link" onclick="adminTab('products',this)"><span class="icon">📦</span> Products</div>
+        <div class="sidebar-link" onclick="adminTab('orders',this)"><span class="icon">🛒</span> Orders</div>
+        <div class="sidebar-link" onclick="adminTab('vendors',this)"><span class="icon">🏪</span> Vendors</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Users</div>
+        <div class="sidebar-link" onclick="adminTab('users',this)"><span class="icon">👥</span> Customers</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Settings</div>
+        <div class="sidebar-link"><span class="icon">⚙️</span> Settings</div>
+        <div class="sidebar-link" onclick="navigate('home')"><span class="icon">🏠</span> View Store</div>
+      </div>
+    </aside>
+    <div class="admin-content">
+
+      <!-- Overview Tab -->
+      <div id="admin-overview">
+        <div class="admin-title">Dashboard Overview</div>
+        <div class="admin-subtitle">Welcome back, Admin. Here's what's happening today.</div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total Revenue</div>
+            <div class="stat-value">$84,240</div>
+            <div class="stat-change change-up">↑ 12.4% vs last month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Orders Today</div>
+            <div class="stat-value">342</div>
+            <div class="stat-change change-up">↑ 8.1% vs yesterday</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Active Users</div>
+            <div class="stat-value">12,841</div>
+            <div class="stat-change change-up">↑ 3.2% this week</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Avg Order Value</div>
+            <div class="stat-value">$246</div>
+            <div class="stat-change change-down">↓ 1.8% vs last month</div>
+          </div>
+        </div>
+        <div class="admin-grid-2">
+          <div class="admin-card">
+            <div class="admin-card-title">Revenue (Last 7 Days) <span style="font-size:12px;color:var(--c-muted);font-weight:400">$84K total</span></div>
+            <div class="chart-bars" id="rev-chart"></div>
+            <div class="chart-labels" id="rev-labels"></div>
+          </div>
+          <div class="admin-card">
+            <div class="admin-card-title">Orders by Category <span style="font-size:12px;color:var(--c-muted);font-weight:400">This month</span></div>
+            <div id="cat-chart" style="display:flex;flex-direction:column;gap:8px;margin-top:8px"></div>
+          </div>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-title">Recent Orders <button class="link-btn" onclick="adminTab('orders',null)">View all →</button></div>
+          <table class="data-table">
+            <thead><tr><th>Order #</th><th>Customer</th><th>Products</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:600">#CM-10499</td><td>Sarah J.</td><td>iPhone Case, AirPods</td><td><strong>$289</strong></td><td><span class="status-pill s-processing">Processing</span></td><td><div class="action-btns"><button class="action-btn">View</button><button class="action-btn">Edit</button></div></td></tr>
+              <tr><td style="font-weight:600">#CM-10498</td><td>Mike R.</td><td>Nike Air Max 270</td><td><strong>$150</strong></td><td><span class="status-pill s-shipped">Shipped</span></td><td><div class="action-btns"><button class="action-btn">View</button><button class="action-btn">Track</button></div></td></tr>
+              <tr><td style="font-weight:600">#CM-10497</td><td>Emma L.</td><td>Yoga Mat, Dumbbells</td><td><strong>$89</strong></td><td><span class="status-pill s-delivered">Delivered</span></td><td><div class="action-btns"><button class="action-btn">View</button><button class="action-btn">Invoice</button></div></td></tr>
+              <tr><td style="font-weight:600">#CM-10496</td><td>David K.</td><td>Gaming Headset</td><td><strong>$199</strong></td><td><span class="status-pill s-cancelled">Cancelled</span></td><td><div class="action-btns"><button class="action-btn">View</button><button class="action-btn">Refund</button></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Products Tab -->
+      <div id="admin-products" style="display:none">
+        <div class="admin-title">Product Management</div>
+        <div class="admin-subtitle">Add, edit and manage your catalog</div>
+        <div style="display:flex;gap:10px;margin-bottom:20px">
+          <div class="search-bar" style="flex:1;margin-bottom:0"><span style="color:var(--c-muted)">🔍</span><input placeholder="Search products..."></div>
+          <button class="btn btn-dark" onclick="showToast('Product form ready','success')">+ Add Product</button>
+        </div>
+        <div class="admin-card">
+          <table class="data-table">
+            <thead><tr><th>Product</th><th>SKU</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🎧</span><span style="font-weight:600">AirPods Pro 2nd Gen</span></td><td style="font-size:12px;color:var(--c-muted)">APL-AIP-02</td><td>Electronics</td><td><strong>$249</strong></td><td><span style="color:var(--c-success)">In Stock (48)</span></td><td><span class="status-pill s-delivered">Active</span></td><td><div class="action-btns"><button class="action-btn">Edit</button><button class="action-btn danger">Delete</button></div></td></tr>
+              <tr><td style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">👟</span><span style="font-weight:600">Nike Air Max 270</span></td><td style="font-size:12px;color:var(--c-muted)">NK-AM270</td><td>Fashion</td><td><strong>$150</strong></td><td><span style="color:var(--c-success)">In Stock (122)</span></td><td><span class="status-pill s-delivered">Active</span></td><td><div class="action-btns"><button class="action-btn">Edit</button><button class="action-btn danger">Delete</button></div></td></tr>
+              <tr><td style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">💻</span><span style="font-weight:600">MacBook Air M3</span></td><td style="font-size:12px;color:var(--c-muted)">APL-MBA-M3</td><td>Electronics</td><td><strong>$1,099</strong></td><td><span style="color:var(--c-accent2)">Low Stock (3)</span></td><td><span class="status-pill s-delivered">Active</span></td><td><div class="action-btns"><button class="action-btn">Edit</button><button class="action-btn danger">Delete</button></div></td></tr>
+              <tr><td style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🎮</span><span style="font-weight:600">PS5 DualSense Controller</span></td><td style="font-size:12px;color:var(--c-muted)">SNY-DS5</td><td>Gaming</td><td><strong>$69</strong></td><td><span style="color:var(--c-accent2)">Out of Stock</span></td><td><span class="status-pill s-processing">Draft</span></td><td><div class="action-btns"><button class="action-btn">Edit</button><button class="action-btn danger">Delete</button></div></td></tr>
+              <tr><td style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🛋️</span><span style="font-weight:600">Ergonomic Chair Pro</span></td><td style="font-size:12px;color:var(--c-muted)">HOME-EC01</td><td>Home</td><td><strong>$399</strong></td><td><span style="color:var(--c-success)">In Stock (15)</span></td><td><span class="status-pill s-delivered">Active</span></td><td><div class="action-btns"><button class="action-btn">Edit</button><button class="action-btn danger">Delete</button></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Orders Tab -->
+      <div id="admin-orders" style="display:none">
+        <div class="admin-title">Order Management</div>
+        <div class="admin-subtitle">Process and track all orders</div>
+        <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+          <div class="filter-pill active">All Orders (1,248)</div>
+          <div class="filter-pill">Processing (84)</div>
+          <div class="filter-pill">Shipped (231)</div>
+          <div class="filter-pill">Delivered (889)</div>
+          <div class="filter-pill">Cancelled (44)</div>
+        </div>
+        <div class="admin-card">
+          <table class="data-table">
+            <thead><tr><th>Order</th><th>Customer</th><th>Date</th><th>Amount</th><th>Payment</th><th>Fulfillment</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:600">#CM-10499</td><td>Sarah Johnson</td><td>May 13</td><td>$289</td><td><span style="color:var(--c-success)">✓ Paid</span></td><td><span class="status-pill s-processing">Processing</span></td><td><div class="action-btns"><button class="action-btn">View</button><button class="action-btn">Ship</button></div></td></tr>
+              <tr><td style="font-weight:600">#CM-10498</td><td>Mike Reynolds</td><td>May 12</td><td>$150</td><td><span style="color:var(--c-success)">✓ Paid</span></td><td><span class="status-pill s-shipped">Shipped</span></td><td><div class="action-btns"><button class="action-btn">Track</button><button class="action-btn">View</button></div></td></tr>
+              <tr><td style="font-weight:600">#CM-10497</td><td>Emma Liu</td><td>May 11</td><td>$89</td><td><span style="color:var(--c-success)">✓ Paid</span></td><td><span class="status-pill s-delivered">Delivered</span></td><td><div class="action-btns"><button class="action-btn">Invoice</button><button class="action-btn">Review</button></div></td></tr>
+              <tr><td style="font-weight:600">#CM-10496</td><td>David Kim</td><td>May 10</td><td>$199</td><td><span style="color:var(--c-accent2)">↩ Refund</span></td><td><span class="status-pill s-cancelled">Cancelled</span></td><td><div class="action-btns"><button class="action-btn">Process</button><button class="action-btn">View</button></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Users Tab -->
+      <div id="admin-users" style="display:none">
+        <div class="admin-title">Customer Management</div>
+        <div class="admin-subtitle">View and manage user accounts</div>
+        <div class="admin-card">
+          <table class="data-table">
+            <thead><tr><th>Customer</th><th>Email</th><th>Joined</th><th>Orders</th><th>Spent</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td><div style="display:flex;align-items:center;gap:8px"><div style="width:32px;height:32px;border-radius:50%;background:var(--c-surface2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">SJ</div><span>Sarah Johnson</span></div></td><td style="font-size:12px;color:var(--c-muted)">sarah.j@email.com</td><td>Jan 2025</td><td>12</td><td>$2,480</td><td><span class="status-pill s-delivered">Active</span></td><td><div class="action-btns"><button class="action-btn">View</button><button class="action-btn danger">Ban</button></div></td></tr>
+              <tr><td><div style="display:flex;align-items:center;gap:8px"><div style="width:32px;height:32px;border-radius:50%;background:var(--c-surface2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">MR</div><span>Mike Reynolds</span></div></td><td style="font-size:12px;color:var(--c-muted)">mike.r@email.com</td><td>Mar 2025</td><td>5</td><td>$890</td><td><span class="status-pill s-delivered">Active</span></td><td><div class="action-btns"><button class="action-btn">View</button><button class="action-btn danger">Ban</button></div></td></tr>
+              <tr><td><div style="display:flex;align-items:center;gap:8px"><div style="width:32px;height:32px;border-radius:50%;background:var(--c-surface2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">EL</div><span>Emma Liu</span></div></td><td style="font-size:12px;color:var(--c-muted)">emma.l@email.com</td><td>Feb 2026</td><td>2</td><td>$248</td><td><span class="status-pill s-processing">Pending</span></td><td><div class="action-btns"><button class="action-btn">View</button><button class="action-btn danger">Ban</button></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Analytics Tab -->
+      <div id="admin-analytics" style="display:none">
+        <div class="admin-title">Analytics Dashboard</div>
+        <div class="admin-subtitle">Deep insights into your store performance</div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-label">Conversion Rate</div><div class="stat-value">3.8%</div><div class="stat-change change-up">↑ 0.4% vs last month</div></div>
+          <div class="stat-card"><div class="stat-label">Avg. Session</div><div class="stat-value">4m 22s</div><div class="stat-change change-up">↑ 12% engagement</div></div>
+          <div class="stat-card"><div class="stat-label">Cart Abandon Rate</div><div class="stat-value">68%</div><div class="stat-change change-down">↑ 2% — needs work</div></div>
+          <div class="stat-card"><div class="stat-label">Return Customers</div><div class="stat-value">41%</div><div class="stat-change change-up">↑ 5% loyalty</div></div>
+        </div>
+        <div class="admin-grid-2">
+          <div class="admin-card">
+            <div class="admin-card-title">Top Products</div>
+            <div id="top-products-chart"></div>
+          </div>
+          <div class="admin-card">
+            <div class="admin-card-title">Traffic Sources</div>
+            <div id="traffic-chart"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vendors Tab -->
+      <div id="admin-vendors" style="display:none">
+        <div class="admin-title">Vendor Management</div>
+        <div class="admin-subtitle">Manage your marketplace vendors</div>
+        <div class="admin-card">
+          <table class="data-table">
+            <thead><tr><th>Vendor</th><th>Category</th><th>Products</th><th>Sales</th><th>Commission</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:600">TechGadgets Inc.</td><td>Electronics</td><td>248</td><td>$42,800</td><td>8%</td><td><span class="status-pill s-delivered">Verified</span></td><td><div class="action-btns"><button class="action-btn">View</button><button class="action-btn">Edit</button></div></td></tr>
+              <tr><td style="font-weight:600">FashionHub Co.</td><td>Fashion</td><td>1,240</td><td>$28,400</td><td>12%</td><td><span class="status-pill s-delivered">Verified</span></td><td><div class="action-btns"><button class="action-btn">View</button><button class="action-btn">Edit</button></div></td></tr>
+              <tr><td style="font-weight:600">HomeStyle Store</td><td>Home & Garden</td><td>380</td><td>$18,200</td><td>10%</td><td><span class="status-pill s-processing">Pending</span></td><td><div class="action-btns"><button class="action-btn">Approve</button><button class="action-btn danger">Reject</button></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- FOOTER -->
+<footer id="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">Cloud<span>Mart</span></div>
+      <p class="footer-desc">The modern multi-vendor marketplace for the cloud era. Discover, buy, and sell with confidence.</p>
+    </div>
+    <div>
+      <div class="footer-head">Shop</div>
+      <a class="footer-link" onclick="navigate('products')">All Products</a>
+      <a class="footer-link" onclick="navigate('categories')">Categories</a>
+      <a class="footer-link">New Arrivals</a>
+      <a class="footer-link">Deals</a>
+    </div>
+    <div>
+      <div class="footer-head">Account</div>
+      <a class="footer-link" onclick="navigate('profile')">My Profile</a>
+      <a class="footer-link" onclick="navigate('orders')">Orders</a>
+      <a class="footer-link" onclick="navigate('wishlist')">Wishlist</a>
+      <a class="footer-link" onclick="navigate('login')">Sign In</a>
+    </div>
+    <div>
+      <div class="footer-head">Company</div>
+      <a class="footer-link">About Us</a>
+      <a class="footer-link">Careers</a>
+      <a class="footer-link">Contact</a>
+      <a class="footer-link">Privacy Policy</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 CloudMart. All rights reserved.</div>
+    <div class="footer-badges">
+      <span class="footer-badge">🔒 SSL Secured</span>
+      <span class="footer-badge">☁️ AWS Powered</span>
+      <span class="footer-badge">✅ SOC 2</span>
+    </div>
+  </div>
+</footer>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-container"></div>
+
+<script>
+const PRODUCTS = [
+  { id:1, name:'AirPods Pro (2nd Gen)', brand:'Apple', price:249, oldPrice:299, cat:'Electronics', icon:'🎧', badge:'sale', rating:'★★★★★', page:'product-detail' },
+  { id:2, name:'Nike Air Max 270', brand:'Nike', price:150, cat:'Fashion', icon:'👟', badge:'hot', rating:'★★★★☆', page:'product-detail' },
+  { id:3, name:'MacBook Air M3', brand:'Apple', price:1099, cat:'Electronics', icon:'💻', badge:'new', rating:'★★★★★', page:'product-detail' },
+  { id:4, name:'Clean Code', brand:'Robert Martin', price:39, cat:'Books', icon:'📚', rating:'★★★★☆', page:'product-detail' },
+  { id:5, name:'Ergonomic Chair', brand:'Herman Miller', price:399, oldPrice:499, cat:'Home', icon:'🛋️', badge:'sale', rating:'★★★★★', page:'product-detail' },
+  { id:6, name:'PS5 DualSense', brand:'Sony', price:69, cat:'Gaming', icon:'🎮', badge:'new', rating:'★★★★★', page:'product-detail' },
+  { id:7, name:'Yoga Mat Pro', brand:'Lululemon', price:78, cat:'Sports', icon:'🧘', rating:'★★★★☆', page:'product-detail' },
+  { id:8, name:'Vitamin C Serum', brand:'The Ordinary', price:29, cat:'Beauty', icon:'🧴', badge:'hot', rating:'★★★★★', page:'product-detail' },
+];
+
+const CATS = [
+  { name:'Electronics', icon:'📱', count:'8,420 products' },
+  { name:'Fashion', icon:'👗', count:'12,800 products' },
+  { name:'Home & Garden', icon:'🏡', count:'6,340 products' },
+  { name:'Sports', icon:'⚽', count:'4,200 products' },
+  { name:'Books', icon:'📚', count:'22,000 products' },
+  { name:'Beauty', icon:'💄', count:'5,600 products' },
+  { name:'Gaming', icon:'🎮', count:'3,100 products' },
+  { name:'Toys', icon:'🧸', count:'2,800 products' },
+];
+
+const CART_ITEMS = [
+  { name:'AirPods Pro (2nd Gen)', variant:'White', price:249, icon:'🎧' },
+  { name:'Nike Air Max 270', variant:'Size 10', price:150, icon:'👟' },
+  { name:'Clean Code', variant:'Paperback', price:39, icon:'📚' },
+];
+
+function makeProductCard(p) {
+  const badge = p.badge ? `<div class="product-badge badge-${p.badge}">${p.badge.toUpperCase()}</div>` : '';
+  const oldPrice = p.oldPrice ? `<span class="product-price-old">$${p.oldPrice}</span>` : '';
+  return `<div class="product-card" onclick="navigate('product-detail')">
+    <div class="product-img">${p.icon}${badge}</div>
+    <div class="product-info">
+      <div class="product-brand">${p.brand}</div>
+      <div class="product-name">${p.name}</div>
+      <div class="product-price-row">
+        <span class="product-price">$${p.price}</span>${oldPrice}
+      </div>
+      <div class="product-stars">${p.rating} <span style="color:var(--c-muted)">(${Math.floor(Math.random()*2000+200)})</span></div>
+      <div class="product-actions">
+        <button class="pa-btn pa-primary" onclick="event.stopPropagation();addToCart()">Add to Cart</button>
+        <button class="pa-btn pa-secondary" onclick="event.stopPropagation();addToWishlist()">♡</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function makeCatCard(c) {
+  return `<div class="cat-card" onclick="navigate('products')">
+    <div class="cat-icon">${c.icon}</div>
+    <div class="cat-name">${c.name}</div>
+    <div class="cat-count">${c.count}</div>
+  </div>`;
+}
+
+function makeCartItem(item) {
+  return `<div class="cart-item">
+    <div class="cart-item-img">${item.icon}</div>
+    <div>
+      <div class="cart-item-name">${item.name}</div>
+      <div class="cart-item-variant">${item.variant}</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:8px">
+        <div class="qty-control">
+          <button class="qty-btn" style="width:28px;height:28px" onclick="showToast('Quantity updated')">−</button>
+          <div class="qty-val" style="width:36px;height:28px;font-size:13px">1</div>
+          <button class="qty-btn" style="width:28px;height:28px" onclick="showToast('Quantity updated')">+</button>
+        </div>
+        <button style="background:none;border:none;font-size:12px;color:var(--c-accent2);cursor:pointer;font-weight:600" onclick="showToast('Removed from cart','warning')">Remove</button>
+      </div>
+    </div>
+    <div class="cart-item-price">$${item.price}</div>
+  </div>`;
+}
+
+// Populate on load
+document.getElementById('home-products').innerHTML = PRODUCTS.slice(0,4).map(makeProductCard).join('');
+document.getElementById('trending-products').innerHTML = PRODUCTS.slice(4,8).map(makeProductCard).join('');
+document.getElementById('home-cats').innerHTML = CATS.slice(0,6).map(makeCatCard).join('');
+document.getElementById('all-products').innerHTML = PRODUCTS.map(makeProductCard).join('');
+document.getElementById('all-cats').innerHTML = CATS.map(makeCatCard).join('');
+document.getElementById('wishlist-products').innerHTML = PRODUCTS.slice(0,4).map(makeProductCard).join('');
+document.getElementById('related-products').innerHTML = PRODUCTS.slice(3,7).map(makeProductCard).join('');
+document.getElementById('cart-items').innerHTML = CART_ITEMS.map(makeCartItem).join('');
+
+// Revenue chart
+const revData = [62,78,54,91,84,72,96];
+const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const maxRev = Math.max(...revData);
+document.getElementById('rev-chart').innerHTML = revData.map((v,i) =>
+  `<div class="chart-bar" style="height:${Math.round(v/maxRev*100)}%" title="$${v}K"></div>`
+).join('');
+document.getElementById('rev-labels').innerHTML = days.map(d =>
+  `<div class="chart-lbl">${d}</div>`
+).join('');
+
+// Category chart
+const catData = [
+  {name:'Electronics',pct:38,color:'var(--c-text)'},
+  {name:'Fashion',pct:28,color:'#c9a227'},
+  {name:'Home',pct:18,color:'#1a5fa8'},
+  {name:'Sports',pct:10,color:'#2d7a4f'},
+  {name:'Other',pct:6,color:'#b0ae9f'},
+];
+document.getElementById('cat-chart').innerHTML = catData.map(c =>
+  `<div style="display:flex;align-items:center;gap:8px">
+    <div style="width:80px;font-size:12px;color:var(--c-muted)">${c.name}</div>
+    <div style="flex:1;background:var(--c-surface2);border-radius:4px;height:10px;overflow:hidden">
+      <div style="height:100%;width:${c.pct}%;background:${c.color};border-radius:4px;transition:width .5s"></div>
+    </div>
+    <div style="font-size:12px;font-weight:600;min-width:28px">${c.pct}%</div>
+  </div>`
+).join('');
+
+// Top products chart
+const topProds = [{n:'AirPods Pro',v:82},{n:'Nike Air Max',v:64},{n:'MacBook Air',v:58},{n:'PS5 DualSense',v:41},{n:'Yoga Mat',v:33}];
+document.getElementById('top-products-chart').innerHTML = topProds.map(p =>
+  `<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+    <div style="width:100px;font-size:12px;color:var(--c-muted)">${p.n}</div>
+    <div style="flex:1;background:var(--c-surface2);border-radius:4px;height:8px">
+      <div style="height:100%;width:${p.v}%;background:var(--c-text);border-radius:4px"></div>
+    </div>
+    <div style="font-size:12px;font-weight:600">${p.v}%</div>
+  </div>`
+).join('');
+
+// Traffic sources
+const traffic = [{s:'Organic',v:44},{s:'Direct',v:28},{s:'Social',v:16},{s:'Email',v:8},{s:'Paid',v:4}];
+document.getElementById('traffic-chart').innerHTML = traffic.map(t =>
+  `<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+    <div style="width:60px;font-size:12px;color:var(--c-muted)">${t.s}</div>
+    <div style="flex:1;background:var(--c-surface2);border-radius:4px;height:8px">
+      <div style="height:100%;width:${t.v}%;background:var(--c-gold);border-radius:4px"></div>
+    </div>
+    <div style="font-size:12px;font-weight:600">${t.v}%</div>
+  </div>`
+).join('');
+
+// Navigation
+let currentPage = 'home';
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById('pg-' + page.replace(/-/g,'_').replace(/\//,'_'));
+  if (el) { el.classList.add('active'); window.scrollTo(0, 0); }
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  const nl = document.getElementById('nl-' + page);
+  if (nl) nl.classList.add('active');
+  currentPage = page;
+}
+// Fix for pages with underscores in IDs
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const map = {
+    'home':'pg-home','products':'pg-products','product-detail':'pg-product-detail',
+    'categories':'pg-categories','cart':'pg-cart','wishlist':'pg-wishlist',
+    'checkout':'pg-checkout','login':'pg-login','register':'pg-register',
+    'forgot':'pg-forgot','profile':'pg-profile','orders':'pg-orders','admin':'pg-admin'
+  };
+  const pgId = map[page];
+  if (pgId) {
+    const el = document.getElementById(pgId);
+    if (el) { el.classList.add('active'); window.scrollTo(0,0); }
+  }
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  const nl = document.getElementById('nl-' + page);
+  if (nl) nl.classList.add('active');
+  currentPage = page;
+}
+
+// Admin tabs
+function adminTab(tab, el) {
+  ['overview','products','orders','users','analytics','vendors'].forEach(t => {
+    const el = document.getElementById('admin-'+t);
+    if (el) el.style.display = 'none';
+  });
+  const target = document.getElementById('admin-'+tab);
+  if (target) target.style.display = 'block';
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  if (el) el.classList.add('active');
+}
+
+// Cart
+let cartCount = 3;
+function addToCart() {
+  cartCount++;
+  document.getElementById('cart-count').textContent = cartCount;
+  showToast('Added to cart! 🛒', 'success');
+}
+function addToWishlist() {
+  showToast('Saved to wishlist ♡', 'success');
+}
+
+// Product detail
+let qty = 1;
+function updateQty(d) {
+  qty = Math.max(1, qty + d);
+  document.getElementById('qty').textContent = qty;
+}
+function selectThumb(el, emoji) {
+  document.querySelectorAll('.pdp-thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('pdp-main-img').textContent = emoji;
+}
+function selectVariant(el) {
+  el.closest('.variants').querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Filters
+function toggleFilter(el, val) {
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  showToast(`Filtered: ${val}`);
+}
+function filterSearch(val) {
+  const count = val ? Math.floor(Math.random() * 20 + 5) : 48;
+  const el = document.getElementById('products-count');
+  if (el) el.textContent = `Showing ${count} products${val ? ' for "'+val+'"' : ''}`;
+}
+function sortProducts(val) {
+  showToast(`Sorted by: ${val}`);
+}
+
+// Auth
+function doLogin() {
+  showToast('Welcome back! 👋', 'success');
+  navigate('home');
+}
+
+// Toast
+function showToast(msg, type='') {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = 'toast' + (type ? ' '+type : '');
+  t.innerHTML = `<span>${type==='success'?'✓':type==='warning'?'⚠':'ℹ'}</span>${msg}`;
+  c.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transform='translateY(8px)'; t.style.transition='all .3s'; setTimeout(()=>t.remove(),300); }, 2500);
+}
+</script>
