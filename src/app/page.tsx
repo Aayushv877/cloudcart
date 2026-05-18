@@ -43,14 +43,14 @@ interface Toast {
 
 // ── DATA ─────────────────────────────────────────────────────────────
 const PRODUCTS: Product[] = [
-  { id: 1, name: "AirPods Pro (2nd Gen)", brand: "Apple", price: 249, oldPrice: 299, cat: "Electronics", icon: "🎧", badge: "sale", rating: "★★★★★" },
-  { id: 2, name: "Nike Air Max 270", brand: "Nike", price: 150, cat: "Fashion", icon: "👟", badge: "hot", rating: "★★★★☆" },
-  { id: 3, name: "MacBook Air M3", brand: "Apple", price: 1099, cat: "Electronics", icon: "💻", badge: "new", rating: "★★★★★" },
-  { id: 4, name: "Clean Code", brand: "Robert Martin", price: 39, cat: "Books", icon: "📚", rating: "★★★★☆" },
-  { id: 5, name: "Ergonomic Chair", brand: "Herman Miller", price: 399, oldPrice: 499, cat: "Home", icon: "🛋️", badge: "sale", rating: "★★★★★" },
-  { id: 6, name: "PS5 DualSense", brand: "Sony", price: 69, cat: "Gaming", icon: "🎮", badge: "new", rating: "★★★★★" },
-  { id: 7, name: "Yoga Mat Pro", brand: "Lululemon", price: 78, cat: "Sports", icon: "🧘", rating: "★★★★☆" },
-  { id: 8, name: "Vitamin C Serum", brand: "The Ordinary", price: 29, cat: "Beauty", icon: "🧴", badge: "hot", rating: "★★★★★" },
+  { id: 1, name: "AirPods Pro (2nd Gen)", brand: "Apple", price: 24990, oldPrice: 26900, cat: "Electronics", icon: "🎧", badge: "sale", rating: "★★★★★" },
+  { id: 2, name: "Nike Air Max 270", brand: "Nike", price: 12995, cat: "Fashion", icon: "👟", badge: "hot", rating: "★★★★☆" },
+  { id: 3, name: "MacBook Air M3", brand: "Apple", price: 99900, cat: "Electronics", icon: "💻", badge: "new", rating: "★★★★★" },
+  { id: 4, name: "Clean Code", brand: "Robert Martin", price: 650, cat: "Books", icon: "📚", rating: "★★★★☆" },
+  { id: 5, name: "Ergonomic Chair", brand: "Herman Miller", price: 129999, oldPrice: 149999, cat: "Home", icon: "🛋️", badge: "sale", rating: "★★★★★" },
+  { id: 6, name: "PS5 DualSense", brand: "Sony", price: 5990, cat: "Gaming", icon: "🎮", badge: "new", rating: "★★★★★" },
+  { id: 7, name: "Yoga Mat Pro", brand: "Lululemon", price: 6800, cat: "Sports", icon: "🧘", rating: "★★★★☆" },
+  { id: 8, name: "Vitamin C Serum", brand: "The Ordinary", price: 950, cat: "Beauty", icon: "🧴", badge: "hot", rating: "★★★★★" },
 ];
 
 const CATS: Category[] = [
@@ -65,9 +65,9 @@ const CATS: Category[] = [
 ];
 
 const CART_ITEMS_DATA: CartItem[] = [
-  { name: "AirPods Pro (2nd Gen)", variant: "White", price: 249, icon: "🎧" },
-  { name: "Nike Air Max 270", variant: "Size 10", price: 150, icon: "👟" },
-  { name: "Clean Code", variant: "Paperback", price: 39, icon: "📚" },
+  { name: "AirPods Pro (2nd Gen)", variant: "White", price: 24990, icon: "🎧" },
+  { name: "Nike Air Max 270", variant: "Size 10", price: 12995, icon: "👟" },
+  { name: "Clean Code", variant: "Paperback", price: 650, icon: "📚" },
 ];
 
 const REV_DATA = [62, 78, 54, 91, 84, 72, 96];
@@ -87,6 +87,8 @@ const TRAFFIC = [
   { s: "Organic", v: 44 }, { s: "Direct", v: 28 }, { s: "Social", v: 16 },
   { s: "Email", v: 8 }, { s: "Paid", v: 4 },
 ];
+
+const formatINR = (value: number) => value.toLocaleString("en-IN");
 
 const REVIEW_COUNTS: Record<number, number> = {
   1: 2847, 2: 1432, 3: 981, 4: 456, 5: 2103, 6: 3421, 7: 789, 8: 1654,
@@ -160,8 +162,8 @@ export default function Page() {
         <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 1, color: "var(--c-muted)", marginBottom: 4 }}>{p.brand}</div>
         <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 8, lineHeight: 1.35 }}>{p.name}</div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontFamily: "var(--font-display)", fontSize: 16, fontWeight: 700 }}>₹{p.price}</span>
-          {p.oldPrice && <span style={{ fontSize: 12, color: "var(--c-muted)", textDecoration: "line-through" }}>₹{p.oldPrice}</span>}
+          <span style={{ fontFamily: "var(--font-display)", fontSize: 16, fontWeight: 700 }}>₹{formatINR(p.price)}</span>
+          {p.oldPrice && <span style={{ fontSize: 12, color: "var(--c-muted)", textDecoration: "line-through" }}>₹{formatINR(p.oldPrice)}</span>}
         </div>
         <div style={{ marginTop: 6, fontSize: 11, color: "var(--c-gold)" }}>{p.rating} <span style={{ color: "var(--c-muted)" }}>({REVIEW_COUNTS[p.id] ?? 500})</span></div>
         <div style={{ display: "flex", gap: 6, marginTop: 10 }}>
@@ -329,7 +331,7 @@ export default function Page() {
               <span style={{ fontSize: 12, color: "var(--c-muted)" }}>4.9 (2,847 reviews)</span>
               <span style={{ fontSize: 11, color: "var(--c-success)", fontWeight: 600 }}>✓ In stock</span>
             </div>
-            <div style={{ fontFamily: "var(--font-display)", fontSize: 30, fontWeight: 800 }}>₹249.00 <span style={{ fontSize: 16, color: "var(--c-muted)", textDecoration: "line-through", fontWeight: 400, fontFamily: "var(--font-body)" }}>₹299.00</span></div>
+            <div style={{ fontFamily: "var(--font-display)", fontSize: 30, fontWeight: 800 }}>₹24,990 <span style={{ fontSize: 16, color: "var(--c-muted)", textDecoration: "line-through", fontWeight: 400, fontFamily: "var(--font-body)" }}>₹26,900</span></div>
             <p style={{ color: "var(--c-muted)", lineHeight: 1.7, fontSize: 14 }}>Active Noise Cancellation up to 2x more powerful. Adaptive Transparency. Personalized Spatial Audio with dynamic head tracking. Up to 30 hours total listening time with case.</p>
             <div>
               <div style={{ fontSize: 12, fontWeight: 600, color: "var(--c-muted)", textTransform: "uppercase", letterSpacing: 1, marginBottom: 8 }}>Color</div>
@@ -415,7 +417,7 @@ export default function Page() {
                   <button onClick={() => showToast("Removed from cart", "warning")} style={{ background: "none", border: "none", fontSize: 12, color: "var(--c-accent2)", cursor: "pointer", fontWeight: 600 }}>Remove</button>
                 </div>
               </div>
-              <div style={{ fontFamily: "var(--font-display)", fontSize: 16, fontWeight: 700 }}>₹{item.price}</div>
+              <div style={{ fontFamily: "var(--font-display)", fontSize: 16, fontWeight: 700 }}>₹{formatINR(item.price)}</div>
             </div>
           ))}
         </div>
@@ -426,10 +428,10 @@ export default function Page() {
               <input type="text" placeholder="Promo code" value={promoCode} onChange={(e) => setPromoCode(e.target.value)} style={{ flex: 1, padding: "9px 12px", border: "1px solid var(--c-border)", borderRadius: 8, fontFamily: "var(--font-body)", fontSize: 13, background: "var(--c-surface2)", outline: "none" }} />
               <button onClick={() => showToast("Promo applied!", "success")} style={{ padding: "9px 14px", background: "var(--c-surface2)", border: "1px solid var(--c-border)", borderRadius: 8, cursor: "pointer", fontSize: 13, fontWeight: 600, fontFamily: "var(--font-body)" }}>Apply</button>
             </div>
-            {[["Subtotal (3 items)", "₹497.00"], ["Shipping", <span key="ship" style={{ color: "var(--c-success)" }}>Free</span>], ["Tax (8%)", "₹39.76"], [<span key="promo" style={{ color: "var(--c-accent2)" }}>Promo (SAVE10)</span>, <span key="promoamt" style={{ color: "var(--c-accent2)" }}>−₹49.70</span>]].map((row, i) => (
+            {[["Subtotal (3 items)", "₹38,635"], ["Shipping", <span key="ship" style={{ color: "var(--c-success)" }}>Free</span>], ["Tax (8%)", "₹3,090.80"], [<span key="promo" style={{ color: "var(--c-accent2)" }}>Promo (SAVE10)</span>, <span key="promoamt" style={{ color: "var(--c-accent2)" }}>−₹3,863.50</span>]].map((row, i) => (
               <div key={i} style={{ display: "flex", justifyContent: "space-between", fontSize: 14, marginBottom: 12 }}><span>{row[0]}</span><span>{row[1]}</span></div>
             ))}
-            <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 16, borderTop: "1px solid var(--c-border)", paddingTop: 14 }}><span>Total</span><span>₹487.06</span></div>
+            <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 16, borderTop: "1px solid var(--c-border)", paddingTop: 14 }}><span>Total</span><span>₹37,862.30</span></div>
             <button onClick={() => navigate("checkout")} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", padding: "11px 22px", borderRadius: "var(--r)", cursor: "pointer", fontSize: 14, fontWeight: 600, fontFamily: "var(--font-body)", border: "none", background: "var(--c-text)", color: "#fff", marginTop: 16 }}>Checkout →</button>
             <button onClick={() => navigate("products")} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", padding: "11px 22px", borderRadius: "var(--r)", cursor: "pointer", fontSize: 14, fontWeight: 600, fontFamily: "var(--font-body)", background: "transparent", border: "1.5px solid var(--c-text)", color: "var(--c-text)", marginTop: 8 }}>Continue Shopping</button>
             <div style={{ marginTop: 16, textAlign: "center" }}>
@@ -496,7 +498,7 @@ export default function Page() {
             </div>
             <div style={{ marginTop: 16 }}>
               <div style={{ fontSize: 12, fontWeight: 600, color: "var(--c-muted)", textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>Shipping Method</div>
-              {[["Standard (3-5 days) — FREE", "₹0.00", true], ["Express (1-2 days)", "₹12.99", false]].map(([label, price, checked]) => (
+              {[["Standard (3-5 days) — FREE", "₹0", true], ["Express (1-2 days)", "₹499", false]].map(([label, price, checked]) => (
                 <label key={label as string} style={{ display: "flex", alignItems: "center", gap: 12, padding: 12, border: `${checked ? "1.5px solid var(--c-text)" : "1px solid var(--c-border)"}`, borderRadius: 8, cursor: "pointer", background: checked ? "var(--c-surface2)" : "transparent", marginBottom: 8 }}>
                   <input type="radio" name="ship" defaultChecked={checked as boolean} style={{ accentColor: "var(--c-text)" }} />
                   <span style={{ flex: 1, fontWeight: 600, fontSize: 13 }}>{label as string}</span>
@@ -513,17 +515,17 @@ export default function Page() {
         <div>
           <div style={{ background: "var(--c-surface)", border: "1px solid var(--c-border)", borderRadius: "var(--r-lg)", padding: 24 }}>
             <h3 style={{ fontFamily: "var(--font-display)", fontSize: 16, fontWeight: 700, marginBottom: 20 }}>Order Summary</h3>
-            {[["🎧", "AirPods Pro 2nd Gen", "White · Qty 1", "₹249"], ["👟", "Nike Air Max 270", "Size 10 · Qty 1", "₹150"], ["📚", "Clean Code Book", "Paperback · Qty 1", "₹39"]].map(([icon, name, variant, price]) => (
+            {[["🎧", "AirPods Pro 2nd Gen", "White · Qty 1", "₹24,990"], ["👟", "Nike Air Max 270", "Size 10 · Qty 1", "₹12,995"], ["📚", "Clean Code Book", "Paperback · Qty 1", "₹650"]].map(([icon, name, variant, price]) => (
               <div key={name as string} style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 10 }}>
                 <div style={{ background: "var(--c-surface2)", borderRadius: 6, width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>{icon as string}</div>
                 <div style={{ flex: 1 }}><div style={{ fontSize: 13, fontWeight: 600 }}>{name as string}</div><div style={{ fontSize: 11, color: "var(--c-muted)" }}>{variant as string}</div></div>
                 <div style={{ fontWeight: 700, fontSize: 13 }}>{price as string}</div>
               </div>
             ))}
-            {[["Subtotal", "₹438.00"], ["Shipping", <span key="s" style={{ color: "var(--c-success)" }}>Free</span>], ["Tax", "₹35.04"]].map(([k, v], i) => (
+            {[["Subtotal", "₹38,635"], ["Shipping", <span key="s" style={{ color: "var(--c-success)" }}>Free</span>], ["Tax", "₹3,090.80"]].map(([k, v], i) => (
               <div key={i} style={{ display: "flex", justifyContent: "space-between", fontSize: 14, marginBottom: 12 }}><span>{k}</span><span>{v}</span></div>
             ))}
-            <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 16, borderTop: "1px solid var(--c-border)", paddingTop: 14 }}><span>Total</span><span>₹473.04</span></div>
+            <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 16, borderTop: "1px solid var(--c-border)", paddingTop: 14 }}><span>Total</span><span>₹41,725.80</span></div>
           </div>
         </div>
       </div>
@@ -534,7 +536,7 @@ export default function Page() {
   const AuthCard = ({ children }: { children: React.ReactNode }) => (
     <div style={{ minHeight: "calc(100vh - var(--nav-h))", display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 20px", background: "var(--c-bg)" }}>
       <div style={{ background: "var(--c-surface)", border: "1px solid var(--c-border)", borderRadius: "var(--r-lg)", padding: 40, width: "100%", maxWidth: 420 }}>
-        <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 800, marginBottom: 6, textAlign: "center" }}>Cloud<span style={{ color: "var(--c-accent2)" }}>Mart</span></div>
+        <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 800, marginBottom: 6, textAlign: "center" }}>Cloud<span style={{ color: "var(--c-accent2)" }}>Cart</span></div>
         {children}
       </div>
     </div>
@@ -657,10 +659,10 @@ export default function Page() {
             </thead>
             <tbody>
               {[
-                ["#CM-10482", "May 10, 2026", "AirPods Pro, Nike Shoes", "₹399.00", "delivered", "Delivered"],
-                ["#CM-10441", "Apr 28, 2026", "MacBook Pro Sleeve", "₹49.00", "delivered", "Delivered"],
-                ["#CM-10391", "Apr 15, 2026", "Gaming Chair, Desk Mat", "₹349.00", "shipped", "Shipped"],
-                ["#CM-10312", "Mar 30, 2026", "Protein Powder (2 items)", "₹89.00", "processing", "Processing"],
+                ["#CM-10482", "May 10, 2026", "AirPods Pro, Nike Shoes", "₹37,985", "delivered", "Delivered"],
+                ["#CM-10441", "Apr 28, 2026", "MacBook Pro Sleeve", "₹1,299", "delivered", "Delivered"],
+                ["#CM-10391", "Apr 15, 2026", "Gaming Chair, Desk Mat", "₹1,36,799", "shipped", "Shipped"],
+                ["#CM-10312", "Mar 30, 2026", "Protein Powder (2 items)", "₹4,499", "processing", "Processing"],
               ].map(([ord, date, items, total, statusKey, statusLabel]) => (
                 <tr key={ord as string} style={{ transition: "background .15s" }}>
                   <td style={{ padding: "12px", borderBottom: "1px solid var(--c-border)", fontWeight: 600 }}>{ord as string}</td>
@@ -690,7 +692,7 @@ export default function Page() {
       <div style={{ display: "flex", minHeight: "calc(100vh - var(--nav-h))" }}>
         {/* Sidebar */}
         <aside style={{ width: 220, background: "var(--c-text)", padding: "24px 16px", position: "sticky", top: "var(--nav-h)", height: "calc(100vh - var(--nav-h))", overflowY: "auto", flexShrink: 0 }}>
-          <div style={{ fontFamily: "var(--font-display)", fontSize: 15, fontWeight: 800, color: "#fff", marginBottom: 28, paddingLeft: 8 }}>Cloud<span style={{ color: "var(--c-accent2)" }}>Mart</span> <span style={{ fontSize: 11, color: "#7a7870", fontWeight: 500 }}>Admin</span></div>
+          <div style={{ fontFamily: "var(--font-display)", fontSize: 15, fontWeight: 800, color: "#fff", marginBottom: 28, paddingLeft: 8 }}>Cloud<span style={{ color: "var(--c-accent2)" }}>Cart</span> <span style={{ fontSize: 11, color: "#7a7870", fontWeight: 500 }}>Admin</span></div>
           {[
             { section: "Main", links: [{ icon: "📊", label: "Overview", tab: "overview" }, { icon: "📈", label: "Analytics", tab: "analytics" }] },
             { section: "Commerce", links: [{ icon: "📦", label: "Products", tab: "products" }, { icon: "🛒", label: "Orders", tab: "orders" }, { icon: "🏪", label: "Vendors", tab: "vendors" }] },
@@ -774,11 +776,11 @@ export default function Page() {
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
                   <thead><tr>{["Product", "SKU", "Category", "Price", "Stock", "Status", "Actions"].map((h) => <th key={h} style={{ textAlign: "left", fontSize: 11, textTransform: "uppercase", letterSpacing: 1, color: "var(--c-muted)", fontWeight: 600, padding: "8px 12px", borderBottom: "2px solid var(--c-border)" }}>{h}</th>)}</tr></thead>
                   <tbody>
-                    {[["🎧", "AirPods Pro 2nd Gen", "APL-AIP-02", "Electronics", "₹249", "In Stock (48)", "active", "Active"],
-                      ["👟", "Nike Air Max 270", "NK-AM270", "Fashion", "₹150", "In Stock (122)", "active", "Active"],
-                      ["💻", "MacBook Air M3", "APL-MBA-M3", "Electronics", "₹1,099", "Low Stock (3)", "warning", "Active"],
-                      ["🎮", "PS5 DualSense Controller", "SNY-DS5", "Gaming", "₹69", "Out of Stock", "warning", "Draft"],
-                      ["🛋️", "Ergonomic Chair Pro", "HOME-EC01", "Home", "₹399", "In Stock (15)", "active", "Active"],
+                    {[["🎧", "AirPods Pro 2nd Gen", "APL-AIP-02", "Electronics", "₹24,990", "In Stock (48)", "active", "Active"],
+                      ["👟", "Nike Air Max 270", "NK-AM270", "Fashion", "₹12,995", "In Stock (122)", "active", "Active"],
+                      ["💻", "MacBook Air M3", "APL-MBA-M3", "Electronics", "₹99,900", "Low Stock (3)", "warning", "Active"],
+                      ["🎮", "PS5 DualSense Controller", "SNY-DS5", "Gaming", "₹5,990", "Out of Stock", "warning", "Draft"],
+                      ["🛋️", "Ergonomic Chair Pro", "HOME-EC01", "Home", "₹1,29,999", "In Stock (15)", "active", "Active"],
                     ].map(([icon, name, sku, cat, price, stock, stockType, status]) => (
                       <tr key={name as string}>
                         <td style={{ padding: 12, borderBottom: "1px solid var(--c-border)" }}><div style={{ display: "flex", alignItems: "center", gap: 8 }}><span style={{ fontSize: 20 }}>{icon as string}</span><span style={{ fontWeight: 600 }}>{name as string}</span></div></td>
@@ -824,9 +826,9 @@ export default function Page() {
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
                   <thead><tr>{["Customer", "Email", "Joined", "Orders", "Spent", "Status", "Actions"].map((h) => <th key={h} style={{ textAlign: "left", fontSize: 11, textTransform: "uppercase", letterSpacing: 1, color: "var(--c-muted)", fontWeight: 600, padding: "8px 12px", borderBottom: "2px solid var(--c-border)" }}>{h}</th>)}</tr></thead>
                   <tbody>
-                    {[["SJ", "Sarah Johnson", "sarah.j@email.com", "Jan 2025", "12", "₹2,480", "Active"],
-                      ["MR", "Mike Reynolds", "mike.r@email.com", "Mar 2025", "5", "₹890", "Active"],
-                      ["EL", "Emma Liu", "emma.l@email.com", "Feb 2026", "2", "₹248", "Pending"],
+                    {[["SJ", "Sarah Johnson", "sarah.j@email.com", "Jan 2025", "12", "₹2,48,000", "Active"],
+                      ["MR", "Mike Reynolds", "mike.r@email.com", "Mar 2025", "5", "₹89,000", "Active"],
+                      ["EL", "Emma Liu", "emma.l@email.com", "Feb 2026", "2", "₹24,800", "Pending"],
                     ].map(([initials, name, email, joined, orders, spent, status]) => (
                       <tr key={name as string}>
                         <td style={{ padding: 12, borderBottom: "1px solid var(--c-border)" }}>
@@ -973,10 +975,10 @@ export default function Page() {
         <thead><tr>{["Order #", "Customer", full ? "Date" : "Products", full ? "Amount" : "Amount", full ? "Payment" : "Status", full ? "Fulfillment" : "Status", "Actions"].slice(0, full ? 7 : 6).map((h, i) => <th key={i} style={{ textAlign: "left", fontSize: 11, textTransform: "uppercase", letterSpacing: 1, color: "var(--c-muted)", fontWeight: 600, padding: "8px 12px", borderBottom: "2px solid var(--c-border)" }}>{h}</th>)}</tr></thead>
         <tbody>
           {[
-            ["#CM-10499", "Sarah J.", "May 13", "iPhone Case, AirPods", "₹289", "processing", "Processing"],
-            ["#CM-10498", "Mike R.", "May 12", "Nike Air Max 270", "₹150", "shipped", "Shipped"],
-            ["#CM-10497", "Emma L.", "May 11", "Yoga Mat, Dumbbells", "₹89", "delivered", "Delivered"],
-            ["#CM-10496", "David K.", "May 10", "Gaming Headset", "₹199", "cancelled", "Cancelled"],
+            ["#CM-10499", "Sarah J.", "May 13", "iPhone Case, AirPods", "₹25,789", "processing", "Processing"],
+            ["#CM-10498", "Mike R.", "May 12", "Nike Air Max 270", "₹12,995", "shipped", "Shipped"],
+            ["#CM-10497", "Emma L.", "May 11", "Yoga Mat, Dumbbells", "₹8,290", "delivered", "Delivered"],
+            ["#CM-10496", "David K.", "May 10", "Gaming Headset", "₹4,999", "cancelled", "Cancelled"],
           ].map(([ord, cust, date, prods, amt, statusKey, statusLabel]) => (
             <tr key={ord as string}>
               <td style={{ padding: 12, borderBottom: "1px solid var(--c-border)", fontWeight: 600 }}>{ord as string}</td>
@@ -1065,7 +1067,7 @@ export default function Page() {
       {/* Nav */}
       <nav style={{ position: "sticky", top: 0, left: 0, right: 0, zIndex: 100, height: "var(--nav-h)", background: "rgba(249,248,246,0.92)", backdropFilter: "blur(12px)", borderBottom: "1px solid var(--c-border)", display: "flex", alignItems: "center", padding: "0 24px", gap: 8 }}>
         <div onClick={() => navigate("home")} style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 18, letterSpacing: -0.5, marginRight: 8, cursor: "pointer" }}>
-          Cloud<span style={{ color: "var(--c-accent2)" }}>Mart</span>
+          Cloud<span style={{ color: "var(--c-accent2)" }}>Cart</span>
         </div>
         <div style={{ display: "flex", gap: 2, flex: 1 }}>
           {(["home", "products", "categories", "admin"] as Page[]).map((p) => (
@@ -1093,7 +1095,7 @@ export default function Page() {
       <footer style={{ background: "var(--c-text)", color: "#b0ae9f", padding: 48 }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 40, marginBottom: 40 }}>
           <div>
-            <div style={{ fontFamily: "var(--font-display)", fontSize: 20, fontWeight: 800, color: "#fff", marginBottom: 12 }}>Cloud<span style={{ color: "var(--c-accent2)" }}>Mart</span></div>
+            <div style={{ fontFamily: "var(--font-display)", fontSize: 20, fontWeight: 800, color: "#fff", marginBottom: 12 }}>Cloud<span style={{ color: "var(--c-accent2)" }}>Cart</span></div>
             <p style={{ fontSize: 13, lineHeight: 1.7, color: "#7a7870" }}>The modern multi-vendor marketplace for the cloud era. Discover, buy, and sell with confidence.</p>
           </div>
           <div>
@@ -1116,7 +1118,7 @@ export default function Page() {
           </div>
         </div>
         <div style={{ borderTop: "1px solid #2d2923", paddingTop: 24, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
-          <div style={{ fontSize: 12, color: "#4a4844" }}>© 2026 CloudMart. All rights reserved.</div>
+          <div style={{ fontSize: 12, color: "#4a4844" }}>© 2026 CloudCart. All rights reserved.</div>
           <div style={{ display: "flex", gap: 8 }}>
             {["🔒 SSL Secured", "☁️ AWS Powered", "✅ SOC 2"].map((b) => (
               <span key={b} style={{ background: "#2d2923", border: "1px solid #3d3b35", borderRadius: 6, padding: "4px 10px", fontSize: 11, color: "#7a7870" }}>{b}</span>
